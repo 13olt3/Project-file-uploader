@@ -1,0 +1,39 @@
+{
+  "name": "project-file-uploader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch --env-file=.env app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.5.0",
+    "@prisma/client": "^7.5.0",
+    "@quixo3/prisma-session-store": "^3.1.19",
+    "bcryptjs": "^3.0.3",
+    "ejs": "^5.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
+    "express-validator": "^7.3.1",
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "prisma": "^7.5.0"
+  },
+  "overrides": {
+    "@hono/node-server": "1.19.11",
+    "@mrleebo/prisma-ast": "0.15.0",
+    "prisma": {
+      "hono": "4.12.8",
+      "@hono/node-server": "1.19.11",
+      "@mrleebo/prisma-ast": "0.15.0"
+    }
+  }
+}

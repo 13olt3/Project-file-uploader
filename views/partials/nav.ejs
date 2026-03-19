@@ -1,0 +1,20 @@
+<nav>
+  <ul class="navbar-links">
+
+    <li><a href="/">Index</a></li>
+
+    <% if (locals.user){%>
+      <li><a href="/upload">Upload File</a></li>
+      <li><a href="/logout">Logout</a></li>
+
+
+      <%}%>
+        <% if (!locals.user){%>
+          <li><a href="/login">Login</a></li>
+          <li><a href="/signup">Signup</a></li>
+          <%}%>
+  </ul>
+
+
+
+</nav>
