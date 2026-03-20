@@ -40,6 +40,26 @@ function signupPage(req, res) {
   });
 }
 
+function loginPage(req, res) {
+  res.render("login", {
+    title: "Login Page",
+  });
+}
+
+const loginUser = passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/",
+});
+
+function logout(req, res, next) {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+}
+
 const createNewUser = [
   validateUser,
   async (req, res, next) => {
@@ -91,4 +111,7 @@ module.exports = {
   indexPage,
   signupPage,
   createNewUser,
+  loginPage,
+  loginUser,
+  logout,
 };

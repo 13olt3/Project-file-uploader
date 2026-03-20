@@ -1,31 +1,35 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcryptjs");
+const prisma = require("../lib/prisma.js");
 
 // run a prisma query to get required data
 
 passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const { rows } = await pool.query(
-        "SELECT * FROM user_table WHERE username = $1",
-        [username],
-      );
-      const user = rows[0];
+  new LocalStrategy(
+    { usernameField: "email" },
+    async (email, password, done) => {
+      try {
+        const user = await prisma.user.findFirst({
+          where: { email: email },
+        });
+        console.log(user);
+        if (!user) {
+          console.log("no user");
+          return done(null, false, { message: "Incorrect email" });
+        }
+        const match = await bcrypt.compare(password, user.password);
 
-      if (!user) {
-        return done(null, false, { message: "Incorrect username" });
+        if (!match) {
+          console.log("incorrect pw");
+          return done(null, false, { message: "Incorrect password" });
+        }
+        return done(null, user);
+      } catch (err) {
+        return done(err);
       }
-      const match = await bcrypt.compare(password, user.password);
-
-      if (!match) {
-        return done(null, false, { message: "Incorrect password" });
-      }
-      return done(null, user);
-    } catch (err) {
-      return done(err);
-    }
-  }),
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {
@@ -34,11 +38,9 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const { rows } = await pool.query(
-      "SELECT * FROM user_table WHERE id = $1",
-      [id],
-    );
-    const user = rows[0];
+    const user = await prisma.user.findFirst({
+      where: { id: id },
+    });
 
     done(null, user);
   } catch (err) {
