@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 
@@ -11,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 const session = require("express-session");
 
 const { PrismaPg } = require("@prisma/adapter-pg"); // For other db adapters, see Prisma docs
-const { PrismaClient } = require("./generated/prisma/client");
+const { PrismaClient } = require("./generated/prisma/client.js");
 const { PrismaSessionStore } = require("@quixo3/prisma-session-store");
 
 // DATABASE_URL defined in env file included in prisma.config.js; see Prisma docs
