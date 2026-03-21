@@ -13,7 +13,7 @@ passport.use(
         const user = await prisma.user.findFirst({
           where: { email: email },
         });
-        console.log(user);
+
         if (!user) {
           console.log("no user");
           return done(null, false, { message: "Incorrect email" });

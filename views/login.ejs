@@ -11,28 +11,36 @@
 </head>
 
 <body>
-  <%= title%>
+  <div class="dash-board">
+    <%= title%>
 
-    <% if (locals.errorWarning) {%>
-      <%=errorWarning%>
+      <% if (locals.errorWarning) {%>
+        <%=errorWarning%>
 
-        <%}%>
+          <%}%>
+            <%- include('partials/nav') %>
+  </div>
+  <div class="main-content">
 
-          <form method="POST" action="/login" autocomplete="off">
-            <label for="email">User Email:</label>
-            <input type="email" id="Email" name="email">
-
-
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password">
+  </div>
 
 
-            <button> SUBMIT</button>
 
-          </form>
+  <form method="POST" action="/login" autocomplete="off">
+    <label for="email">User Email:</label>
+    <input type="email" id="Email" name="email">
 
 
-          <%- include('partials/nav') %>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+
+
+    <button>Submit</button>
+
+  </form>
+
+
+
 
 
 </body>

@@ -18,12 +18,15 @@
         <%- include('partials/nav') %>
 
           <% if (locals.user){%>
-            <%= locals.user.username%>
-              <%}%>
+            <div>Hello <%= locals.user.username%>, would you like to upload a file?</div>
+            <%}%>
 
   </div>
   <div class="main-content">
-
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="upload" />
+      <button>Upload</button>
+    </form>
 
   </div>
 

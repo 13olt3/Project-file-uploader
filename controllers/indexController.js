@@ -4,6 +4,17 @@ const prisma = require("../lib/prisma.js");
 const bcrypt = require("bcryptjs");
 const errorMsg = require("../public/error");
 
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+const upload = multer({ storage });
+
 const validateUser = [
   body("username").trim(),
   body("email")
@@ -89,23 +100,19 @@ const createNewUser = [
   },
 ];
 
-// const textTest = [
-//   validateTest,
-//   async (req, res, next) => {
-//     const { tester } = matchedData(req);
+function uploadPage(req, res) {
+  res.render("upload", {
+    title: "Upload page",
+  });
+}
 
-//     try {
-//       await prisma.tester.create({
-//         data: {
-//           message: tester,
-//         },
-//       });
-//     } catch (err) {
-//       next(err);
-//     }
-//     res.redirect("/");
-//   },
-// ];
+const uploadFile = [
+  upload.single("upload"),
+  (req, res) => {
+    console.log(req.file);
+    res.redirect("/");
+  },
+];
 
 module.exports = {
   indexPage,
@@ -114,4 +121,6 @@ module.exports = {
   loginPage,
   loginUser,
   logout,
+  uploadPage,
+  uploadFile,
 };

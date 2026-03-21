@@ -1,0 +1,28 @@
+body {
+  display: grid;
+  grid-template-rows: auto-fit 5fr;
+}
+
+.dash-board {
+  border-bottom: solid black 2px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 1em;
+  justify-content: flex-end;
+}
+
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.main-content {
+  margin-top: 1em;
+  display: grid;
+  grid-template-rows: 1fr 6fr;
+}
