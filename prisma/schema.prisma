@@ -25,5 +25,26 @@ model User {
   username  String
   email     String   @unique
   password  String
+  folder    Folders[]
 }
+//each user has access to the folder he creates
+
+
+model Folders {
+  id          Int     @id @default(autoincrement())
+  foldername  String
+  filename    File[]
+  user        User @relation(fields: [userId], references:[id])
+  userId      Int
+}
+//each folder can hold files
+
+model File {
+  id          Int     @id @default(autoincrement())
+  filename    String  @unique
+  size        Int
+  folder      Folders  @relation(fields: [folderId], references:[id])
+  folderId    Int
+}
+//each file...
 

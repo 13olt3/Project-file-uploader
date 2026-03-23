@@ -17,31 +17,20 @@ const upload = multer({ storage });
 
 const validateUser = [
   body("username").trim(),
-  body("email")
-    .trim()
-    .isEmail()
-    .withMessage(`Email is ${errorMsg.emailErr}`)
-    .custom(async (value) => {
-      // const user = await dbQuery.checkEmail(value);
-      // if (user) {
-      //   throw new Error(errorMsg.emailInUseErr);
-      // }
-
-      ///FIX THIS
-      return true;
-    }),
+  body("email").trim().isEmail().withMessage(`Email is ${errorMsg.emailErr}`),
   body("password").isLength({ min: 1 }),
   body("confirmPw")
     .custom((value, { req }) => value === req.body.password)
     .withMessage("Passwords do not match."),
 ];
 
-async function indexPage(req, res) {
-  // const tests = await prisma.tester.findMany();
-  // console.log(tests);
+const validateFolderName = [body("newFolder").trim()];
 
+async function indexPage(req, res) {
+  const folders = await prisma.folders.findMany();
   res.render("index", {
     title: "Index Page",
+    folders: folders,
   });
 }
 
@@ -86,13 +75,18 @@ const createNewUser = [
     }
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
+
       await prisma.user.create({
         data: {
           username: username,
           email: email,
           password: hashedPassword,
+          folder: {
+            create: [{ foldername: "Root" }],
+          },
         },
       });
+
       res.redirect("/");
     } catch (err) {
       next(err);
@@ -100,17 +94,43 @@ const createNewUser = [
   },
 ];
 
-function uploadPage(req, res) {
+async function uploadPage(req, res) {
+  // console.log(req.params.folderId);
   res.render("upload", {
     title: "Upload page",
+    folderId: req.params.folderId,
   });
 }
 
 const uploadFile = [
+  (req, res, next) => {
+    console.log("1. Route hit! Checking params:", req.params);
+    next(); // Pass it to Multer
+  },
   upload.single("upload"),
   (req, res) => {
+    console.log(req.params.folderId);
     console.log(req.file);
     res.redirect("/");
+  },
+];
+
+//gotta upload to prisma database instead of to the server
+
+const createFolder = [
+  validateFolderName,
+  async (req, res) => {
+    const { newFolder } = matchedData(req);
+
+    try {
+      await prisma.folders.create({
+        data: { foldername: newFolder, userId: res.locals.user.id },
+      });
+
+      res.redirect("/");
+    } catch (err) {
+      next(err);
+    }
   },
 ];
 
@@ -123,4 +143,5 @@ module.exports = {
   logout,
   uploadPage,
   uploadFile,
+  createFolder,
 };

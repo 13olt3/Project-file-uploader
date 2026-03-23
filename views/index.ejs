@@ -25,6 +25,24 @@
   <div class="main-content">
 
 
+    <% if (locals.user){%>
+      <div> Create new directory:
+        <form action="/createFolder" method="post" autocomplete="off">
+          <label for="newFolder">Directory Name:</label>
+          <input type="text" id="newFolder" name="newFolder">
+          <button>Create new directory</button>
+        </form>
+      </div>
+
+      <%folders.forEach((folder)=>{%>
+        <div><a href="/upload/<%=folder.id%>">
+            <%=folder.foldername%>
+          </a></div>
+
+        <%})%>
+          <%}%>
+
+
   </div>
 
 </body>

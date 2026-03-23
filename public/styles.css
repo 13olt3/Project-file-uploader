@@ -23,6 +23,8 @@ li {
 
 .main-content {
   margin-top: 1em;
-  display: grid;
-  grid-template-rows: 1fr 6fr;
+}
+
+.directory-form {
+  margin-bottom: 4em;
 }
