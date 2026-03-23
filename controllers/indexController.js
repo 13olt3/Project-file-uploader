@@ -103,11 +103,7 @@ async function uploadPage(req, res) {
 }
 
 const uploadFile = [
-  (req, res, next) => {
-    console.log("1. Route hit! Checking params:", req.params);
-    next(); // Pass it to Multer
-  },
-  upload.single("upload"),
+  // upload.single("upload"),
   (req, res) => {
     console.log(req.params.folderId);
     console.log(req.file);
