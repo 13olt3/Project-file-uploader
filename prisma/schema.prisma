@@ -45,6 +45,7 @@ model File {
   size        Int
   folder      Folders  @relation(fields: [folderId], references:[id])
   folderId    Int
+  downloadUrl String
 }
 //each file...
 
