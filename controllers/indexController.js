@@ -32,7 +32,6 @@ const validateUser = [
 const validateFolderName = [body("newFolder").trim()];
 
 async function indexPage(req, res) {
-  const folders = await prisma.folders.findMany();
   let foldersData = [];
   if (res.locals.user) {
     foldersData = await prisma.folders.findMany({
@@ -119,7 +118,7 @@ async function uploadPage(req, res) {
       id: Number(req.params.folderId),
     },
   });
-  console.log(folder);
+
   res.render("upload", {
     title: "Upload page",
     folderId: req.params.folderId,
@@ -133,7 +132,7 @@ const uploadFile = [
     try {
       if (!req.file) return res.status(400).send("No file uploaded.");
       const file = req.file;
-      console.log(file);
+      // console.log(file);
       const filePath = `uploads/${Date.now()}-${file.originalname}`;
       const { data, error } = await supabase.storage
         .from("uploaded_files")
@@ -145,8 +144,8 @@ const uploadFile = [
         .from("uploaded_files")
         .getPublicUrl(data.path);
       if (error) throw error;
-      console.log(data);
-      console.log(downloadUrl.data.publicUrl);
+      // console.log(data);
+      // console.log(downloadUrl.data.publicUrl);
       // upload to prisma DB
       await prisma.file.create({
         data: {
@@ -181,33 +180,35 @@ const createFolder = [
   },
 ];
 
-async function showUploads(req, res) {
-  // console.log(res.locals.user.id);
+// async function showUploads(req, res) {
+//   // console.log(res.locals.user.id);
 
-  const filesData = await prisma.file.findMany({
-    where: {
-      folder: {
-        userId: res.locals.user.id,
-      },
-    },
-  });
-  const foldersData = await prisma.folders.findMany({
-    where: {
-      userId: res.locals.user.id,
-    },
-    include: {
-      _count: {
-        select: { filename: true },
-      },
-    },
-  });
+//   const filesData = await prisma.file.findMany({
+//     where: {
+//       folder: {
+//         userId: res.locals.user.id,
+//       },
+//     },
+//   });
+//   const foldersData = await prisma.folders.findMany({
+//     where: {
+//       userId: res.locals.user.id,
+//     },
+//     include: {
+//       _count: {
+//         select: { filename: true },
+//       },
+//     },
+//   });
+//   console.log(filesData);
+//   console.log(foldersData);
 
-  res.render("uploaded", {
-    title: "Uploaded Files",
-    filesData: filesData,
-    foldersData: foldersData,
-  });
-}
+//   res.render("uploaded", {
+//     title: "Uploaded Files",
+//     filesData: filesData,
+//     foldersData: foldersData,
+//   });
+// }
 
 async function showAllFiles(req, res) {
   const foldersWithFiles = await prisma.folders.findMany({
@@ -221,6 +222,7 @@ async function showAllFiles(req, res) {
     folders: foldersWithFiles,
   });
 }
+
 async function specificFolder(req, res) {
   const folder = await prisma.folders.findFirst({
     where: { id: Number(req.params.id) },
@@ -253,7 +255,6 @@ module.exports = {
   uploadPage,
   uploadFile,
   createFolder,
-  showUploads,
   showAllFiles,
   specificFolder,
   deleteFile,

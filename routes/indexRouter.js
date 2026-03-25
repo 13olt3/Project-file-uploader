@@ -8,7 +8,7 @@ indexRouter.get("/signup", indexController.signupPage);
 indexRouter.get("/login", indexController.loginPage);
 indexRouter.get("/logout", indexController.logout);
 indexRouter.get("/upload/:folderId", indexController.uploadPage);
-indexRouter.get("/files", indexController.showUploads);
+
 indexRouter.get("/allFiles", indexController.showAllFiles);
 indexRouter.get("/files/:id", indexController.specificFolder);
 indexRouter.get("/delete/:id", indexController.deleteFile);
