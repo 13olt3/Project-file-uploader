@@ -39,6 +39,9 @@
                   <p>Size: <%= Math.round((file.size / 1024)) %> KB</p>
                   <a href="<%= file.downloadUrl %>">Show file</a>
                 </div>
+                <a href="/delete/<%=file.id%>"
+                  onclick="return confirm('Are you sure you want to delete this file? This cannot be undone.')">Delete
+                  file</a>
                 <% }) %>
             </div>
             <% } else { %>

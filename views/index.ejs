@@ -33,14 +33,18 @@
           <button>Create new directory</button>
         </form>
       </div>
+      <div>
+        <div>Or, choose existing directory:</div>
+        <%folders.forEach((folder)=>{%>
+          <div><a href="/upload/<%=folder.id%>">
+              <%=folder.foldername%>
+            </a></div>
 
-      <%folders.forEach((folder)=>{%>
-        <div><a href="/upload/<%=folder.id%>">
-            <%=folder.foldername%>
-          </a></div>
+          <%})%>
+            <%}%>
 
-        <%})%>
-          <%}%>
+      </div>
+
 
 
   </div>

@@ -3,6 +3,7 @@ const { body, validationResult, matchedData } = require("express-validator");
 const prisma = require("../lib/prisma.js");
 const bcrypt = require("bcryptjs");
 const errorMsg = require("../public/error");
+const path = require("path");
 
 const supabase = require("../config/supabaseClient");
 const bucket = supabase.storage.from("uploaded_files");
@@ -113,10 +114,16 @@ const createNewUser = [
 ];
 
 async function uploadPage(req, res) {
-  // console.log(req.params.folderId);
+  const folder = await prisma.folders.findFirst({
+    where: {
+      id: Number(req.params.folderId),
+    },
+  });
+  console.log(folder);
   res.render("upload", {
     title: "Upload page",
     folderId: req.params.folderId,
+    folderData: folder,
   });
 }
 
@@ -176,16 +183,7 @@ const createFolder = [
 
 async function showUploads(req, res) {
   // console.log(res.locals.user.id);
-  const uploadedData = await prisma.user.findMany({
-    where: { id: res.locals.user.id },
-    include: {
-      folder: {
-        include: {
-          filename: true,
-        },
-      },
-    },
-  });
+
   const filesData = await prisma.file.findMany({
     where: {
       folder: {
@@ -228,11 +226,18 @@ async function specificFolder(req, res) {
     where: { id: Number(req.params.id) },
     include: { filename: true },
   });
-  console.log(folder.filename);
   res.render("oneFolder", {
     title: `Folder contents for ${folder.foldername}`,
     fileData: folder,
   });
+}
+
+async function deleteFile(req, res) {
+  await prisma.file.delete({
+    where: { id: Number(req.params.id) },
+  });
+
+  res.redirect("/allFiles");
 }
 
 module.exports = {
@@ -248,4 +253,5 @@ module.exports = {
   showUploads,
   showAllFiles,
   specificFolder,
+  deleteFile,
 };
