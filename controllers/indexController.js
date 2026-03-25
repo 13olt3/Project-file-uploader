@@ -233,11 +233,14 @@ async function specificFolder(req, res) {
 }
 
 async function deleteFile(req, res) {
+  const fileData = await prisma.file.findFirst({
+    where: { id: Number(req.params.id) },
+  });
   await prisma.file.delete({
     where: { id: Number(req.params.id) },
   });
 
-  res.redirect("/allFiles");
+  res.redirect(`/files/${fileData.folderId}`);
 }
 
 module.exports = {

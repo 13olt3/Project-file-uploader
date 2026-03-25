@@ -1,16 +1,16 @@
 <nav>
   <ul class="navbar-links">
 
-    <li><a href="/">Index</a></li>
 
     <% if (locals.user){%>
-      <!-- <li><a href="/upload">Upload File</a></li> -->
+      <li><a href="/">Upload File</a></li>
       <li><a href="/logout">Logout</a></li>
-      <li><a href="/files">Show uploaded files</a></li>
+      <li><a href="/allFiles">Show uploaded files</a></li>
 
 
       <%}%>
         <% if (!locals.user){%>
+          <li><a href="/">Index</a></li>
           <li><a href="/login">Login</a></li>
           <li><a href="/signup">Signup</a></li>
           <%}%>

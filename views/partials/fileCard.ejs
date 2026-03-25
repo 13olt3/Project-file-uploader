@@ -1,7 +1,7 @@
 <div class="folder-div">
 
   <div>
-    <%= fileData.foldername%>
+    Currently in: <%= fileData.foldername%> folder.
 
       <div class="file-div">
         <% fileData.filename.forEach((fileData)=> { %>
@@ -13,6 +13,9 @@
             </p>
             <p><a href="<%= fileData.downloadUrl%>">Show file</a>
             </p>
+            <a href="/delete/<%=fileData.id%>"
+              onclick="return confirm('Are you sure you want to delete this file? This cannot be undone.')">Delete
+              file</a>
 
           </div>
 
