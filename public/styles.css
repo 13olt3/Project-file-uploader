@@ -28,3 +28,28 @@ li {
 .directory-form {
   margin-bottom: 4em;
 }
+
+.file-div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(100px, 1fr));
+
+  gap: 5px;
+  border: black 2px solid;
+  padding: 10px;
+
+  line-height: 1.5;
+}
+
+.file-card {
+  border: black 2px solid;
+  padding: 10px;
+}
+
+.folder-div {
+  display: grid;
+  grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+
+  gap: 5px;
+
+  line-height: 1.5;
+}

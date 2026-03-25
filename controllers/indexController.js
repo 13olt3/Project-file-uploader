@@ -32,9 +32,23 @@ const validateFolderName = [body("newFolder").trim()];
 
 async function indexPage(req, res) {
   const folders = await prisma.folders.findMany();
+  let foldersData = [];
+  if (res.locals.user) {
+    foldersData = await prisma.folders.findMany({
+      where: {
+        userId: res.locals.user?.id,
+      },
+      include: {
+        _count: {
+          select: { filename: true },
+        },
+      },
+    });
+  }
+
   res.render("index", {
     title: "Index Page",
-    folders: folders,
+    folders: foldersData,
   });
 }
 
@@ -160,6 +174,67 @@ const createFolder = [
   },
 ];
 
+async function showUploads(req, res) {
+  // console.log(res.locals.user.id);
+  const uploadedData = await prisma.user.findMany({
+    where: { id: res.locals.user.id },
+    include: {
+      folder: {
+        include: {
+          filename: true,
+        },
+      },
+    },
+  });
+  const filesData = await prisma.file.findMany({
+    where: {
+      folder: {
+        userId: res.locals.user.id,
+      },
+    },
+  });
+  const foldersData = await prisma.folders.findMany({
+    where: {
+      userId: res.locals.user.id,
+    },
+    include: {
+      _count: {
+        select: { filename: true },
+      },
+    },
+  });
+
+  res.render("uploaded", {
+    title: "Uploaded Files",
+    filesData: filesData,
+    foldersData: foldersData,
+  });
+}
+
+async function showAllFiles(req, res) {
+  const foldersWithFiles = await prisma.folders.findMany({
+    where: { userId: res.locals.user.id },
+    include: {
+      filename: true,
+    },
+  });
+  res.render("allUploads", {
+    title: "All files",
+    folders: foldersWithFiles,
+  });
+}
+async function specificFolder(req, res) {
+  const folder = await prisma.folders.findFirst({
+    where: { id: Number(req.params.id) },
+    include: { filename: true },
+  });
+  console.log(folder.filename);
+  res.render("oneFolder", {
+    title: `Folder contents for ${folder.foldername}`,
+    fileData: folder,
+  });
+}
+
 module.exports = {
   indexPage,
   signupPage,
@@ -170,4 +245,7 @@ module.exports = {
   uploadPage,
   uploadFile,
   createFolder,
+  showUploads,
+  showAllFiles,
+  specificFolder,
 };

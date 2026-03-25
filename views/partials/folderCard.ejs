@@ -1,0 +1,23 @@
+<% if (locals.filesData) {%>
+  <div class="folder-div">
+    <% foldersData.forEach((folder)=>{%>
+      <div>
+        <%= folder.foldername%>
+
+          <% if(folder._count.filename !=0){%>
+            <div>
+              Number of files in this folder: <%= folder._count.filename%>
+
+            </div>
+            <a href="/files/<%=folder.id%>">Show folder contents</a>
+            <%} else {%>
+              <div>This folder is emtpy.</div>
+              <%}})%>
+
+      </div>
+
+
+
+  </div>
+
+  <% } %>

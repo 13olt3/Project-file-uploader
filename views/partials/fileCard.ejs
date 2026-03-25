@@ -1,0 +1,26 @@
+<div class="folder-div">
+
+  <div>
+    <%= fileData.foldername%>
+
+      <div class="file-div">
+        <% fileData.filename.forEach((fileData)=> { %>
+
+          <div class="file-card">
+            <p>File name: <%= fileData.filename %>
+            </p>
+            <p>File size: <%= Math.round((fileData.size)/1024) %>KB
+            </p>
+            <p><a href="<%= fileData.downloadUrl%>">Show file</a>
+            </p>
+          </div>
+
+          <% }); %>
+      </div>
+
+
+  </div>
+
+
+
+</div>
